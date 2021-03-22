@@ -1,0 +1,26 @@
+"""
+Downloads the Movielens dataset and saves it as an artifact
+"""
+import requests
+import tempfile
+import os
+import zipfile
+import pyspark
+import mlflow
+import click
+
+
+@click.command(
+        help="Downloads the MovieLens dataset and saves it as mlflow artifact called 'ratings-csv-dir'."
+)
+@click.option("--url", default="http://files.grouplens.org/datasets/movielens/ml-20m.zip" )
+def load_raw_data(url):
+    with mlflow.start_run() as mlrun:
+        local_dir = tempfile.mkdtemp()
+        loacl_filename = os.path.join(local_dir, "ml-20m.zip")
+        print(f"Downloading {url} to {local_filename}")
+        r = requests.get(url, stream=True)
+        with open(local_filename, "wb") as f:
+            for chunk in r.iter_content(chunk_size=1024):
+                if chunk: # filter out keep-alive new chunks
+                    f.write(chunk)
