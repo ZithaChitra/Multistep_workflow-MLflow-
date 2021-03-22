@@ -1,0 +1,6 @@
+python=3.6
+requests
+click
+keras
+mlflow
+tesorflow=1.15.2
